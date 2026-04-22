@@ -1,13 +1,13 @@
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 export default class RebootToWindowsExtension extends Extension {
-    // Se ejecuta cuando el usuario activa la extensión
+    // Runs when the user enables the extension
     enable() {
-        console.log('Extensión Reboot to Windows activada');
+        console.log('Reboot to Windows extension enabled');
     }
 
-    // Se ejecuta cuando se desactiva (limpieza)
+    // Runs when the extension is disabled (cleanup)
     disable() {
-        console.log('Extensión Reboot to Windows desactivada');
+        console.log('Reboot to Windows extension disabled');
     }
 }
