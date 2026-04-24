@@ -1,44 +1,50 @@
-// extension.js (ESM format for GNOME 45+)
-import { Extension, gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js';
+import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import St from 'gi://St';
-import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
 
 export default class RebootToWindowsExtension extends Extension {
-    // Runs when the extension is enabled
     enable() {
-        console.log('Reboot to Windows UI extension enabled');
+        console.log('Enabling Reboot to Windows MVP');
 
-        // 1. Define our custom menu item (the actual visual element)
-        // St.Label ensures it matches the styling of "Restart" or "Power Off"
-        this._item = new PopupMenu.PopupMenuItem(_('Reboot to Windows'));
+        // 1. Create a top panel button
+        this._indicator = new PanelMenu.Button(0.0, this.metadata.name, false);
+
+        // 2. Add a standard system icon (the reboot symbol)
+        const icon = new St.Icon({
+            icon_name: 'system-reboot-symbolic',
+            style_class: 'system-status-icon',
+        });
+        this._indicator.add_child(icon);
+
+        // 3. Create the drop-down menu item
+        const item = new PopupMenu.PopupMenuItem('Reboot to Windows Now');
         
-        // 2. Placeholder for action (we will implement the actual reboot later)
-        this._item.connect('activate', () => {
-            console.log('"Reboot to Windows" button clicked (No action defined yet)');
-            // Keep the menu expanded to see our button
-            // Main.panel.statusArea.quickSettings.menu.close(); // Uncomment later when logic is working
+        // 4. The core logic: What happens when clicked
+        item.connect('activate', () => {
+            console.log('Executing reboot sequence...');
+            try {
+                // Using GLib to launch our sudoers-approved command and reboot
+                const command = 'sh -c "sudo /usr/sbin/efibootmgr -n 0003 && systemctl reboot"';
+                GLib.spawn_command_line_async(command);
+            } catch (e) {
+                console.error('Failed to execute reboot command:', e);
+            }
         });
 
-        // 3. Insert our item into the native Power menu
-        // Main.panel.statusArea.quickSettings._system holds the Power/Session menus.
-        const systemMenu = Main.panel.statusArea.quickSettings._system;
+        this._indicator.menu.addMenuItem(item);
 
-        // In GNOME 45+, we add our new item to the end of the existing power sub-menu list.
-        if (systemMenu && systemMenu.menu) {
-            systemMenu.menu.addMenuItem(this._item);
-        } else {
-            console.error('Could not locate the native GNOME Power menu.');
-        }
+        // 5. Inject the whole indicator into the right side of the top panel
+        Main.panel.addToStatusArea(this.uuid, this._indicator, 1, 'right');
     }
 
-    // Runs when the extension is disabled (essential for clean removal)
     disable() {
-        console.log('Reboot to Windows UI extension disabled');
-        if (this._item) {
-            this._item.destroy();
-            this._item = null;
+        console.log('Disabling Reboot to Windows MVP');
+        if (this._indicator) {
+            this._indicator.destroy();
+            this._indicator = null;
         }
     }
 }
