@@ -26,7 +26,7 @@ export default class RebootToWindowsExtension extends Extension {
         
         if (systemIndicator && systemIndicator._systemItem && systemIndicator._systemItem.menu) {
             // Inject our button into the native sub-menu
-            systemIndicator._systemItem.menu.addMenuItem(this._item,4);
+            systemIndicator._systemItem.menu.addMenuItem(this._item,3);
             console.log('Successfully injected button into native Power menu.');
         } else {
             console.error('Could not locate the native GNOME Power menu using the new path.');
