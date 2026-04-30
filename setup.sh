@@ -6,16 +6,18 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-# Get the real username of the person running sudo
 TARGET_USER=$SUDO_USER
-
-# Define the sudoers file path
 RULE_FILE="/etc/sudoers.d/gnome-extension-reboot-to-windows"
+WRAPPER_BIN="/usr/local/bin/reboot-to-windows"
 
-# Write the rule to the file
-echo "$TARGET_USER ALL=(root) NOPASSWD: /usr/sbin/efibootmgr -n 0003" > "$RULE_FILE"
+# 1. Install the wrapper script into the system and grant execution permissions
+cp reboot-wrapper.sh "$WRAPPER_BIN"
+chmod +x "$WRAPPER_BIN"
+
+# 2. Write the secure rule into the sudoers file to only allow this specific script
+echo "$TARGET_USER ALL=(root) NOPASSWD: $WRAPPER_BIN" > "$RULE_FILE"
 
 # Apply strict permissions (440 is mandatory for sudoers files)
 chmod 440 "$RULE_FILE"
 
-echo "Setup complete! $TARGET_USER can now reboot to Windows without a password."
+echo "Setup complete! $TARGET_USER can now reboot dynamically to Windows."

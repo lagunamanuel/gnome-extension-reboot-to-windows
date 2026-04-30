@@ -4,6 +4,7 @@ A lightweight GNOME Shell extension that adds a quick panel indicator to reboot 
 
 ## 🚀 Features
 * **One-Click Reboot:** Adds a dedicated system indicator to the top panel.
+* **Dynamic Boot Detection:** Automatically parses `efibootmgr` to find the correct Windows Boot Manager entry, eliminating the need for hardcoded boot numbers.
 * **Seamless Integration:** Uses GNOME's native `GLib` library to execute system commands asynchronously without freezing the UI.
 * **Security First:** Runs entirely in user-space. It uses a strictly scoped `sudoers` rule to grant passwordless execution **only** for the exact `efibootmgr` command, adhering to the Principle of Least Privilege.
 
