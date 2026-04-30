@@ -10,18 +10,18 @@ export default class RebootToWindowsExtension extends Extension {
         // 1. Create the standard menu item
         this._item = new PopupMenu.PopupMenuItem('Reboot to Windows');
         
-        // 2. Attach the DevSecOps reboot logic
+        // 2. Attach the reboot logic
         this._item.connect('activate', () => {
             console.log('Executing reboot sequence to Windows...');
             try {
-                const command = 'sh -c "sudo /usr/sbin/efibootmgr -n 0003 && systemctl reboot"';
+                const command = 'sh -c "sudo /usr/local/bin/reboot-to-windows"';
                 GLib.spawn_command_line_async(command);
             } catch (e) {
                 console.error('Failed to execute reboot command:', e);
             }
         });
 
-        // 3. Locate the "Apagar" native menu using our Looking Glass path
+        // 3. Locate the "Power" native menu using Looking Glass path
         const systemIndicator = Main.panel.statusArea.quickSettings._system;
         
         if (systemIndicator && systemIndicator._systemItem && systemIndicator._systemItem.menu) {
