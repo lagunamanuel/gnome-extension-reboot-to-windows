@@ -25,8 +25,8 @@ sudo ./setup.sh
 Copy the extension files to your local GNOME extensions directory:
 
 ```bash
-mkdir -p ~/.local/share/gnome-shell/extensions/gnome-extension-reboot-to-windows@lagunamanuel.github.com
-cp extension.js metadata.json ~/.local/share/gnome-shell/extensions/gnome-extension-reboot-to-windows@lagunamanuel.github.com/
+mkdir -p ~/.local/share/gnome-shell/extensions/reboot-to-windows@lagunamanuel.github.com
+cp extension.js metadata.json ~/.local/share/gnome-shell/extensions/reboot-to-windows@lagunamanuel.github.com/
 ```
 
 ### 3. Enable the Extension
@@ -34,7 +34,7 @@ If you are on **Wayland**, you must **log out and log back in** for GNOME to det
 Then, enable it via terminal:
 
 ```bash
-gnome-extensions enable gnome-extension-reboot-to-windows@lagunamanuel.github.com
+gnome-extensions enable reboot-to-windows@lagunamanuel.github.com
 ```
 Alternatively, you can enable it using the "Extensions" GUI app.
 If It's not working, try logging out and logging back in another time
