@@ -39,5 +39,20 @@ gnome-extensions enable reboot-to-windows@lagunamanuel.github.com
 Alternatively, you can enable it using the "Extensions" GUI app.
 If It's not working, try logging out and logging back in another time
 
+## 🗑️ Uninstallation
+
+To completely remove the extension and its system-level permissions, follow these steps:
+
+1. Remove the secure wrapper and `sudoers` rule:
+
+```bash
+chmod +x uninstall.sh
+sudo ./uninstall.sh
+```
+2. Remove the GNOME extension files:
+```bash
+rm -rf ~/.local/share/gnome-shell/extensions/reboot-to-windows@lagunamanuel.github.com/
+```
+
 ## 📄 License
 This project is licensed under the GPL-3.0 License - see the [LICENSE](LICENSE) file for details.
