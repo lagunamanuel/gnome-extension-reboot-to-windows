@@ -23,14 +23,8 @@ bash install.sh
 
 To completely remove the extension and its system-level permissions, follow these steps:
 
-1. Remove the secure wrapper and `sudoers` rule:
-
 ```bash
 sudo ./uninstall.sh
-```
-2. Remove the GNOME extension files:
-```bash
-rm -rf ~/.local/share/gnome-shell/extensions/reboot-to-windows@lagunamanuel.github.com/
 ```
 
 ## 📄 License
