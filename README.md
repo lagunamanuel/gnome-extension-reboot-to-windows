@@ -26,7 +26,6 @@ To completely remove the extension and its system-level permissions, follow thes
 1. Remove the secure wrapper and `sudoers` rule:
 
 ```bash
-chmod +x uninstall.sh
 sudo ./uninstall.sh
 ```
 2. Remove the GNOME extension files:
