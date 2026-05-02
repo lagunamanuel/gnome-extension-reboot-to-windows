@@ -13,31 +13,11 @@ A lightweight GNOME Shell extension that adds a native option to reboot directly
 
 ## ⚙️ Installation
 
-### 1. System Configuration
-Before installing the extension, you must set up the secure wrapper script and permissions.
-Run the provided setup script to securely configure the `sudoers.d` rule and install the binary:
-```bash
-chmod +x setup.sh
-sudo ./setup.sh
-```
-
-### 2. Extension Installation
-Copy the extension files to your local GNOME extensions directory:
+Download the latest release and run:
 
 ```bash
-mkdir -p ~/.local/share/gnome-shell/extensions/reboot-to-windows@lagunamanuel.github.com
-cp extension.js metadata.json ~/.local/share/gnome-shell/extensions/reboot-to-windows@lagunamanuel.github.com/
+bash install.sh
 ```
-
-### 3. Enable the Extension
-If you are on **Wayland**, you must **log out and log back in** for GNOME to detect the new extension files. 
-Then, enable it via terminal:
-
-```bash
-gnome-extensions enable reboot-to-windows@lagunamanuel.github.com
-```
-Alternatively, you can enable it using the "Extensions" GUI app.
-If It's not working, try logging out and logging back in another time
 
 ## 🗑️ Uninstallation
 
