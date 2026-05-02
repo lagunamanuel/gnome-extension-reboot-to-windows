@@ -14,7 +14,7 @@ export default class RebootToWindowsExtension extends Extension {
         this._item.connect('activate', () => {
             console.log('Executing reboot sequence to Windows...');
             try {
-                const command = 'sh -c "sudo /usr/local/bin/reboot-to-windows"';
+                const command = 'sudo /usr/local/bin/reboot-to-windows';
                 GLib.spawn_command_line_async(command);
             } catch (e) {
                 console.error('Failed to execute reboot command:', e);
