@@ -1,28 +1,34 @@
 #!/bin/bash
 
-# Check if the script is run with sudo (root privileges)
 if [ "$EUID" -ne 0 ]; then
   echo "Error: Please run this script with sudo."
   exit 1
 fi
 
+REAL_USER=$SUDO_USER
 RULE_FILE="/etc/sudoers.d/gnome-extension-reboot-to-windows"
 WRAPPER_BIN="/usr/local/bin/reboot-to-windows"
+EXTENSION_DIR="/home/$REAL_USER/.local/share/gnome-shell/extensions/reboot-to-windows@lagunamanuel.github.com"
 
-# 1. Remove the sudoers security rule if it exists
+# 1. Disable the extension
+sudo -u "$REAL_USER" gnome-extensions disable "reboot-to-windows@lagunamanuel.github.com" 2>/dev/null || true
+
+# 2. Remove extension files
+if [ -d "$EXTENSION_DIR" ]; then
+    rm -rf "$EXTENSION_DIR"
+    echo "Removed extension files."
+fi
+
+# 3. Remove sudoers rule
 if [ -f "$RULE_FILE" ]; then
     rm -f "$RULE_FILE"
-    echo "Removed sudoers rule: $RULE_FILE"
-else
-    echo "Sudoers rule not found, skipping."
+    echo "Removed sudoers rule."
 fi
 
-# 2. Remove the executable wrapper script if it exists
+# 4. Remove wrapper script
 if [ -f "$WRAPPER_BIN" ]; then
     rm -f "$WRAPPER_BIN"
-    echo "Removed wrapper script: $WRAPPER_BIN"
-else
-    echo "Wrapper script not found, skipping."
+    echo "Removed wrapper script."
 fi
 
-echo "System-level uninstallation complete! Your system is clean."
+echo "Uninstallation complete. Log out and back in to apply changes."
