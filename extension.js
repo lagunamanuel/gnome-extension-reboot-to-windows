@@ -29,11 +29,14 @@ export default class RebootToWindowsExtension extends Extension {
 
         const title = new St.Label({
             text: 'Reboot to Windows',
-            style: 'font-size: 1.2em; font-weight: bold; margin-bottom: 8px;',
+            style: 'font-size: 1.2em; font-weight: bold; margin-bottom: 8px;text-align: center;',
+            x_align: Clutter.ActorAlign.CENTER,
         });
 
         const countdownLabel = new St.Label({
             text: `The system will restart in ${countdown} seconds.`,
+            style: 'text-align: center;',
+            x_align: Clutter.ActorAlign.CENTER,
         });
 
         dialog.contentLayout.add_child(title);
