@@ -10,6 +10,12 @@ const COUNTDOWN_SECONDS = 60;
 
 export default class RebootToWindowsExtension extends Extension {
     enable() {
+        // Only inject the button if Windows Boot Manager is actually detectable
+        if (!this._windowsDetected()) {
+            console.log('[RebootToWindows] Windows Boot Manager not found. Button will not be shown.');
+            return;
+        }
+
         this._item = new PopupMenu.PopupMenuItem('Reboot to Windows');
         this._item.connect('activate', () => this._showConfirmDialog());
 
@@ -21,28 +27,36 @@ export default class RebootToWindowsExtension extends Extension {
         }
     }
 
+    _windowsDetected() {
+        try {
+            const [ok, stdout] = GLib.spawn_command_line_sync('efibootmgr');
+            if (!ok) return false;
+
+            const output = new TextDecoder().decode(stdout);
+            return output.includes('Windows Boot Manager');
+        } catch (e) {
+            console.error('[RebootToWindows] Failed to run efibootmgr:', e);
+            return false;
+        }
+    }
+
     _showConfirmDialog() {
         let countdown = COUNTDOWN_SECONDS;
 
-        // --- Build the dialog ---
         const dialog = new ModalDialog.ModalDialog({});
 
         const title = new St.Label({
             text: 'Reboot to Windows',
-            style: 'font-size: 1.2em; font-weight: bold; margin-bottom: 8px;text-align: center;',
-            x_align: Clutter.ActorAlign.CENTER,
+            style: 'font-size: 1.2em; font-weight: bold; margin-bottom: 8px;',
         });
 
         const countdownLabel = new St.Label({
             text: `The system will restart in ${countdown} seconds.`,
-            style: 'text-align: center;',
-            x_align: Clutter.ActorAlign.CENTER,
         });
 
         dialog.contentLayout.add_child(title);
         dialog.contentLayout.add_child(countdownLabel);
 
-        // --- Buttons ---
         dialog.setButtons([
             {
                 label: 'Cancel',
@@ -62,7 +76,6 @@ export default class RebootToWindowsExtension extends Extension {
             },
         ]);
 
-        // --- Countdown timer ---
         this._timerId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, () => {
             countdown--;
             countdownLabel.set_text(`The system will restart in ${countdown} seconds.`);
